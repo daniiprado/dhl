@@ -738,6 +738,7 @@ switch (request()->get('action')) {
         break;
     default:
         $url = env('APP_URL', 'http://localhost');
+        echo env('BOOKS_SCOPES');
         echo "<p>Debe indicar el parámetro action con los siguientes posibles valores:</p>";
         echo "<ul>";
         foreach ($cases as $case) {

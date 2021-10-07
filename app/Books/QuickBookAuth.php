@@ -28,7 +28,7 @@ class QuickBookAuth
             'ClientID' => env('BOOKS_CLIENT_ID'),
             'ClientSecret' => env('BOOKS_CLIENT_SECRET'),
             'RedirectURI' => env('BOOKS_REDIRECT'),
-            'scope' => "com.intuit.quickbooks.accounting com.intuit.quickbooks.payment openid profile email phone address",
+            'scope' => env('BOOKS_SCOPES'),
             'baseUrl' => env('BOOKS_BASE_URL')
         ]);
         $this->dataService->setLogLocation(dirname('').'logs');

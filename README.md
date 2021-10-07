@@ -4,11 +4,23 @@ Descargar el proyecto localmente y copiar el arvhibo ``.env.example`` y renombra
 Luego configurar las variables correspondientes a:
 
 ```sh
+APP_URL=
 APP_ENV=local
-DHL_ENDPOINT_TEST=https://express.api.dhl.com/mydhlapi/test
-DHL_ENDPOINT_PROD=https://express.api.dhl.com/mydhlapi
+APP_TIMEZONE=America/Bogota
+APP_DEBUG=true
+DHL_ENDPOINT_MOCK=https://api-mock.dhl.com/mydhlapi/
+DHL_ENDPOINT_TEST=https://express.api.dhl.com/mydhlapi/test/
+DHL_ENDPOINT_PROD=https://express.api.dhl.com/mydhlapi/
+DHL_API_KEY=
+DHL_API_SECRET=
 DHL_USERNAME=
 DHL_PASSWORD=
+BOOKS_CLIENT_ID=
+BOOKS_CLIENT_SECRET=
+BOOKS_REDIRECT=http://localhost?action=quickbooks-credentials
+BOOKS_SCOPES=com.intuit.quickbooks.accounting com.intuit.quickbooks.payment openid profile email phone address
+#Development/Production
+BOOKS_BASE_URL=Development
 ```
 Usuario de DHL y contraseña y las URL de comunicación con DHL.
 
