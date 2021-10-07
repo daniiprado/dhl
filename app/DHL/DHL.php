@@ -24,25 +24,52 @@ class DHL
     }
 
     /**
+     * @return array
+     */
+    public function getAdditionalData()
+    {
+        return [
+            'request'   => request()->all(),
+            'endpoint' => $this->client->request()->getUrl(),
+            'raw_response' => $this->client->request()->getRawResponse(),
+            'info' => $this->client->request()->getInfo(),
+            'http_status_code' => $this->client->request()->getHttpStatusCode(),
+            'error' => $this->client->request()->getErrorCode(),
+            'curl_error_code' => $this->client->request()->getCurlErrorCode(),
+            'curl_message' => $this->client->request()->getCurlErrorMessage(),
+            'response_headers' => $this->client->request()->getResponseHeaders(),
+            'request_headers' => $this->client->request()->getRequestHeaders(),
+        ];
+    }
+
+    /**
      * @param $shipmentTrackingNumber
      * @param array $queryParams
-     * @return Curl
+     * @return Curl|false|string
      */
     public function getShipment($shipmentTrackingNumber, array $queryParams = [])
     {
-        return $this->client->request([
-            'Accept: application/json',
-        ])->get("shipments/$shipmentTrackingNumber/proof-of-delivery", $queryParams);
+        return response()->json(
+            $this->client->request([
+                'Accept: application/json',
+            ], true)->get("shipments/$shipmentTrackingNumber/proof-of-delivery", $queryParams),
+            $this->getAdditionalData(),
+            $this->client->request()->getHttpStatusCode()
+        );
     }
 
     /**
      * @param array $bodyRequest
-     * @return Curl
+     * @return Curl|false|string
      */
     public function createShipment(array $bodyRequest = [])
     {
-        return $this->client->request([
-           'Accept: application/json',
-        ])->post('shipments', $bodyRequest);
+        return response()->json(
+            $this->client->request([
+                'Accept: application/json',
+            ], true)->post('shipments', $bodyRequest),
+            $this->getAdditionalData(),
+            $this->client->request()->getHttpStatusCode()
+        );
     }
 }

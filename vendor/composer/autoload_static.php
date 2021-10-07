@@ -11,6 +11,10 @@ class ComposerStaticInit3ffd04ca31627a508b80ef9aa76ca00d
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Q' => 
+        array (
+            'QuickBooksOnline\\API\\' => 21,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -18,6 +22,10 @@ class ComposerStaticInit3ffd04ca31627a508b80ef9aa76ca00d
     );
 
     public static $prefixDirsPsr4 = array (
+        'QuickBooksOnline\\API\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/quickbooks/v3-php-sdk/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',

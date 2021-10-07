@@ -9,5 +9,8 @@
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ]
+  },
+  "require": {
+    "quickbooks/v3-php-sdk": "^6.0"
   }
 }
