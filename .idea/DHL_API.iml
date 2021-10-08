@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/quickbooks/v3-php-sdk" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/fpdf/fpdf" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

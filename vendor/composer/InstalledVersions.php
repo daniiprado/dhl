@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '6da95e415036f268d045b3c27b86260a15fd5e3a',
+    'reference' => '4e83dd5dfe7e1f57882183dacd70205b7285a87d',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,16 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '6da95e415036f268d045b3c27b86260a15fd5e3a',
+      'reference' => '4e83dd5dfe7e1f57882183dacd70205b7285a87d',
+    ),
+    'fpdf/fpdf' => 
+    array (
+      'pretty_version' => '1.83.2',
+      'version' => '1.83.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '6aa31c9b70a3aef2a63f79144fec79b62bad4bb0',
     ),
     'quickbooks/v3-php-sdk' => 
     array (

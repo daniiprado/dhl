@@ -15,6 +15,10 @@ class ComposerStaticInit3ffd04ca31627a508b80ef9aa76ca00d
         array (
             'QuickBooksOnline\\API\\' => 21,
         ),
+        'F' => 
+        array (
+            'Fpdf\\' => 5,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -25,6 +29,10 @@ class ComposerStaticInit3ffd04ca31627a508b80ef9aa76ca00d
         'QuickBooksOnline\\API\\' => 
         array (
             0 => __DIR__ . '/..' . '/quickbooks/v3-php-sdk/src',
+        ),
+        'Fpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fpdf/fpdf/src/Fpdf',
         ),
         'App\\' => 
         array (

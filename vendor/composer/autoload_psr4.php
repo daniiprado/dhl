@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'QuickBooksOnline\\API\\' => array($vendorDir . '/quickbooks/v3-php-sdk/src'),
+    'Fpdf\\' => array($vendorDir . '/fpdf/fpdf/src/Fpdf'),
     'App\\' => array($baseDir . '/app'),
 );
