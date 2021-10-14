@@ -10,11 +10,22 @@ class Request
     /**
      * @var array
      */
-    private $items;
+    private $items = [];
 
     public function __construct($items = [])
     {
-        $this->items = $_GET + $_POST + $items;
+        $raw = file_get_contents("php://input");
+        $decoded = json_decode($raw, true);
+        if (count($_GET) > 0) {
+            $this->items = array_merge($this->items, $_GET);
+        }
+        if (count($_POST) > 0) {
+            $this->items = array_merge($this->items, $_POST);
+        }
+        if (!is_null($decoded) && count($decoded) > 0) {
+            $this->items = array_merge($this->items, $decoded);
+        }
+        $this->items = array_merge($this->items, $items);
     }
 
     /**
@@ -95,7 +106,8 @@ class Request
      */
     public function get($key, $default = null)
     {
-        return array_key_exists($key, $this->all()) ? $this->all()[$key] : $default;
+        // return array_key_exists($key, $this->all()) ? $this->all()[$key] : $default;
+        return $this->input($key, $default);
     }
 
     /**

@@ -46,7 +46,7 @@ class DHL
     /**
      * @param $shipmentTrackingNumber
      * @param array $queryParams
-     * @return Curl|false|string
+     * @return false|string
      */
     public function getShipment($shipmentTrackingNumber, array $queryParams = [])
     {
@@ -59,6 +59,11 @@ class DHL
         );
     }
 
+    /**
+     * @param $shipmentTrackingNumber
+     * @param array $queryParams
+     * @return false|string|void
+     */
     public function getShipmentAsPdf($shipmentTrackingNumber, array $queryParams = [])
     {
         $response = $this->client->request([
@@ -90,19 +95,25 @@ class DHL
 
     /**
      * @param array $bodyRequest
-     * @return Curl|false|string
+     * @return false|string
      */
     public function createShipment(array $bodyRequest = [])
     {
+        $response = $this->client->request([
+            'Accept: application/json',
+        ], true)->post('shipments', $bodyRequest);
         return response()->json(
-            $this->client->request([
-                'Accept: application/json',
-            ], true)->post('shipments', $bodyRequest),
+            $response,
             $this->getAdditionalData(),
             $this->client->request()->getHttpStatusCode()
         );
     }
 
+    /**
+     * @param $shipmentTrackingNumber
+     * @param array $queryParams
+     * @return false|string
+     */
     public function getTracking($shipmentTrackingNumber, array $queryParams = [])
     {
         return response()->json(
