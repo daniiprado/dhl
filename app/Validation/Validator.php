@@ -2,11 +2,15 @@
 
 namespace App\Validation;
 
+use Countable;
+use DateTimeInterface;
+
 class Validator
 {
     public function boolean($value)
     {
-        return ! is_null(filter_var($value, FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE]));
+        $acceptable = [true, false, 0, 1, '0', '1', 'true', 'false'];
+        return in_array($value, $acceptable, true);
     }
 
     public function email($value)
@@ -39,6 +43,13 @@ class Validator
         return validate_date($value);
     }
 
+    public function after($value)
+    {
+        if (! is_string($value) && ! is_numeric($value) && ! $value instanceof DateTimeInterface) {
+            return false;
+        }
+    }
+
     public function date_format($value, $format)
     {
         return validate_date_format($value, $format);
@@ -59,16 +70,50 @@ class Validator
         return is_array($value);
     }
 
+    public function string($value)
+    {
+        return is_string($value);
+    }
+
+    public function size($value, int $size)
+    {
+        if (is_numeric($value)) {
+            return $value === $size;
+        } elseif (is_array($value)) {
+            return count($value) === $size;
+        }
+        return mb_strlen(trim((string) $value)) === $size;
+    }
+
+    public function max($value, int $size)
+    {
+        if (is_numeric($value)) {
+            return $value <= $size;
+        } elseif (is_array($value)) {
+            return count($value) <= $size;
+        }
+        return mb_strlen(trim((string) $value)) <= $size;
+    }
+
+    public function min($value, int $size)
+    {
+        if (is_numeric($value)) {
+            return $value >= $size;
+        } elseif (is_array($value)) {
+            return count($value) >= $size;
+        }
+        return mb_strlen(trim((string) $value)) >= $size;
+    }
+
     public function required($value = null)
     {
-        if (is_bool($value)) {
-            return true;
+        if (is_null($value)) {
+            return false;
+        } elseif (is_string($value) && trim($value) === '') {
+            return false;
+        } elseif ((is_array($value) || $value instanceof Countable) && count($value) < 1) {
+            return false;
         }
-
-        if (is_array($value)) {
-            return count($value) > 0;
-        }
-
-        return trim((string) $value) !== '';
+        return true;
     }
 }

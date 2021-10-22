@@ -26,12 +26,49 @@ class ShipmentRequest
     public function rules()
     {
         $pickupRequestorDetailsTypeCodes = ['business', 'direct_consumer', 'government', 'other', 'private', 'reseller'];
+        $productCode = [
+            'K', // Express 9.00
+            'T', // Express 12.00
+            'Y', // Express 12.00
+            'E', // Express 9.00
+            'P', // Express Wordwilde
+            'U', // Express Wordwilde (EU)
+            'D', // Wordwilde
+            'N', // Domestic Express
+            'H', // Economy select
+            'W', // Economy select (EU)
+        ];
+        $customerReference = [
+            'AAO',
+            'CU',
+            'FF',
+            'FN',
+            'IBC',
+            'LLR',
+            'OBC',
+            'PRN',
+            'ACP',
+            'ACS',
+            'ACR',
+            'CDN',
+            'STD',
+            'CO'
+        ];
         return [
             'plannedShippingDateAndTime' => 'required|date|date_format:Y-m-d\TH:i:s\G\M\TP',
-            'pickup' => 'required|array',
-            'pickup.isRequested' => 'required|boolean',
-            'pickup.pickupRequestorDetails' => 'required|array',
-            'pickup.pickupRequestorDetails.typeCode' => 'required|in:'.implode(',', $pickupRequestorDetailsTypeCodes),
+            'product_code' => 'required|in:'.implode(',', $productCode),
+            'company'  => 'required|string',
+            'contry'  => 'required|size:2',
+            'postalcode'  => 'required|string',
+            'city'  => 'required|string',
+            'street'  => 'required|string',
+            'state'  => 'required|string',
+            'firstname'  => 'required|string',
+            'lastname'  => 'required|string',
+            'product_name'  => 'required|string',
+            'product_weight'  => 'required|float',
+            'id_order' => 'required|numeric',
+            'mg_order' => 'required|numeric',
         ];
     }
 

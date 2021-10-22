@@ -176,99 +176,52 @@ switch (request()->get('action')) {
         $validation = new \App\Validation\ShipmentRequest($request);
         $validation->validate();
         if ($validation->doesntFails()) {
-            /*
             $shipment = [
-                "plannedShippingDateAndTime" => "2021-10-18T15:23:00GMT+01:00",
+                "plannedShippingDateAndTime" => request()->get('plannedShippingDateAndTime'),
                 "pickup" => [
                     "isRequested" => true,
-                    "closeTime" => "18:00",
+                    "closeTime" => env('BUSINESS_CLOSE_TIME'),
                     "pickupDetails" => [
                         "postalAddress" => [
-                            "postalCode" => "N3S4C1",
-                            "cityName" => "Brantford",
-                            "countryCode" => "CA",
-                            "provinceCode" => "ON",
-                            "addressLine1" => "159 Mary Street Brantford",
-                            "addressLine2" => "APD Printing",
-                            "countyName" => "Ontario"
+                            "postalCode" => env('BUSINESS_POSTAL_CODE'),
+                            "cityName" => env('BUSINESS_CITY'),
+                            "countryCode" => env('BUSINESS_COUNTRY_CODE'),
+                            "provinceCode" => env('BUSINESS_PROVINCE_CODE'),
+                            "addressLine1" => env('BUSINESS_ADDRESS'),
+                            "addressLine2" => env('BUSINESS_NAME'),
+                            "countyName" => env('BUSINESS_COUNTY_NAME')
                         ],
                         "contactInformation" => [
-                            "email" => "luis@apdprinting.com",
-                            "phone" => "1-866-215-7831 ext 113",
-                            "mobilePhone" => "+60112345678",
-                            "companyName" => "APD Printing",
-                            "fullName" => "LUIS PEREZ"
-                        ],
-                        "registrationNumbers" => [
-                            [
-                                "typeCode" => "VAT",
-                                "number" => "CZ123456789",
-                                "issuerCountryCode" => "CA"
-                            ]
-                        ],
-                        "bankDetails" => [
-                            [
-                                "name" => "Russian Bank Name",
-                                "settlementLocalCurrency" => "RUB",
-                                "settlementForeignCurrency" => "USD"
-                            ]
+                            "email" => env('BUSINESS_EMAIL'),
+                            "phone" => env('BUSINESS_PHONE'),
+                            "mobilePhone" => env('BUSINESS_MOBILE'),
+                            "companyName" => env('BUSINESS_NAME'),
+                            "fullName" => env('BUSINESS_CONTACT_NAME')
                         ],
                         "typeCode" => "business"
                     ],
-                    "pickupRequestorDetails" => [
-                        "postalAddress" => [
-                            "postalCode" => "75212",
-                            "cityName" => "Dallas",
-                            "countryCode" => "US",
-                            "provinceCode" => "TX",
-                            "addressLine1" => "699 College Avenue",
-                            "countyName" => "Texas"
-                        ],
-                        "contactInformation" => [
-                            "email" => "that@before.de",
-                            "phone" => "+1123456789",
-                            "mobilePhone" => "+60112345678",
-                            "companyName" => "Company Name",
-                            "fullName" => "John Brew"
-                        ],
-                        "registrationNumbers" => [
-                            [
-                                "typeCode" => "VAT",
-                                "number" => "CZ123456789",
-                                "issuerCountryCode" => "CA"
-                            ]
-                        ],
-                        "bankDetails" => [
-                            [
-                                "name" => "Russian Bank Name",
-                                "settlementLocalCurrency" => "RUB",
-                                "settlementForeignCurrency" => "USD"
-                            ]
-                        ],
-                        "typeCode" => "business"
-                    ]
                 ],
-                "productCode" => "Y",
-                "getRateEstimates" => false,
+                "productCode" => request()->get('product_code', 'Y'),
+                "getRateEstimates" => true,
                 "accounts" => [
                     [
                         "typeCode" => "shipper",
-                        "number" => "971929344"
+                        "number" => env('DHL_SHIPPER_ACCOUNT')
                     ]
                 ],
                 "outputImageProperties" => [
                     "printerDPI" => 300,
                     "customerBarcodes" => [
                         [
-                            "content" => "barcode content",
-                            "textBelowBarcode" => "text below barcode",
+                            "content" => request()->get('id_order').' - '.request()->get('mg_order'),
+                            "textBelowBarcode" => request()->get('id_order').' - '.request()->get('mg_order'),
                             "symbologyCode" => "128"
                         ]
                     ],
                     "customerLogos" => [
                         [
                             "fileFormat" => "PNG",
-                            "content" => "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
+                            "content" => env('BUSINESS_LOGO')
                         ]
                     ],
                     "encodingFormat" => "pdf",
@@ -282,77 +235,38 @@ switch (request()->get('action')) {
                     "splitDocumentsByPages" => true,
                     "splitInvoiceAndReceipt" => true
                 ],
-                "customerReferences" => [
-                    [
-                        "value" => "Customer reference",
-                        "typeCode" => "CU"
-                    ]
-                ],
                 "customerDetails" => [
                     "shipperDetails" => [
                         "postalAddress" => [
-                            "postalCode" => "N3S4C1",
-                            "cityName" => "Brantford",
-                            "countryCode" => "CA",
-                            "provinceCode" => "ON",
-                            "addressLine1" => "159 Mary Street Brantford",
-                            "addressLine2" => "APD Printing",
-                            "countyName" => "Ontario"
+                            "postalCode" => env('BUSINESS_POSTAL_CODE'),
+                            "cityName" => env('BUSINESS_CITY'),
+                            "countryCode" => env('BUSINESS_COUNTRY_CODE'),
+                            "provinceCode" => env('BUSINESS_PROVINCE_CODE'),
+                            "addressLine1" => env('BUSINESS_ADDRESS'),
+                            "addressLine2" => env('BUSINESS_NAME'),
+                            "countyName" => env('BUSINESS_COUNTY_NAME')
                         ],
                         "contactInformation" => [
-                            "email" => "luis@apdprinting.com",
-                            "phone" => "1-866-215-7831 ext 113",
-                            "mobilePhone" => "+60112345678",
-                            "companyName" => "APD Printing",
-                            "fullName" => "LUIS PEREZ"
-                        ],
-                        "registrationNumbers" => [
-                            [
-                                "typeCode" => "VAT",
-                                "number" => "CZ123456789",
-                                "issuerCountryCode" => "CZ"
-                            ]
-                        ],
-                        "bankDetails" => [
-                            [
-                                "name" => "Russian Bank Name",
-                                "settlementLocalCurrency" => "RUB",
-                                "settlementForeignCurrency" => "USD"
-                            ]
+                            "email" => env('BUSINESS_EMAIL'),
+                            "phone" => env('BUSINESS_PHONE'),
+                            "mobilePhone" => env('BUSINESS_MOBILE'),
+                            "companyName" => env('BUSINESS_NAME'),
+                            "fullName" => env('BUSINESS_CONTACT_NAME')
                         ],
                         "typeCode" => "business"
                     ],
                     "receiverDetails" => [
                         "postalAddress" => [
-                            "postalCode" => "14800",
-                            "cityName" => "Prague",
-                            "countryCode" => "CZ",
-                            "provinceCode" => "CZ",
-                            "addressLine1" => "V Parku 2308/10",
-                            "addressLine2" => "addres2",
-                            "addressLine3" => "addres3",
-                            "countyName" => "Central Bohemia"
+                            "postalCode" => request()->get('postalcode'),
+                            "cityName" => request()->get('city'),
+                            "countryCode" => request()->get('contry'),
+                            "provinceCode" => request()->get('state'),
+                            "addressLine1" => request()->get('street'),
                         ],
                         "contactInformation" => [
-                            "email" => "that@before.de",
-                            "phone" => "+1123456789",
-                            "mobilePhone" => "+60112345678",
-                            "companyName" => "Company Name",
-                            "fullName" => "John Brew"
-                        ],
-                        "registrationNumbers" => [
-                            [
-                                "typeCode" => "VAT",
-                                "number" => "CZ123456789",
-                                "issuerCountryCode" => "CZ"
-                            ]
-                        ],
-                        "bankDetails" => [
-                            [
-                                "name" => "Russian Bank Name",
-                                "settlementLocalCurrency" => "RUB",
-                                "settlementForeignCurrency" => "USD"
-                            ]
+                            "phone" => env('BUSINESS_PHONE'),
+                            "companyName" => request()->get('company'),
+                            "fullName" => request()->get('firstname').' '.request()->get('lastname')
                         ],
                         "typeCode" => "business"
                     ]
@@ -360,189 +274,24 @@ switch (request()->get('action')) {
                 "content" => [
                     "packages" => [
                         [
-                            "typeCode" => "2BP",
-                            "weight" => 22.5,
+                            "weight" => (float) request()->get('product_weight'),
                             "dimensions" => [
                                 "length" => 15,
                                 "width" => 15,
                                 "height" => 40
                             ],
-                            "customerReferences" => [
-                                [
-                                    "value" => "Customer reference",
-                                    "typeCode" => "CU"
-                                ]
-                            ],
-                            "identifiers" => [
-                                [
-                                    "typeCode" => "shipmentId",
-                                    "value" => "1234567890"
-                                ]
-                            ],
-                            "description" => "Piece content description",
-                            "labelBarcodes" => [
-                                [
-                                    "position" => "left",
-                                    "symbologyCode" => "93",
-                                    "content" => "string",
-                                    "textBelowBarcode" => "text below left barcode"
-                                ]
-                            ],
-                            "labelText" => [
-                                [
-                                    "position" => "left",
-                                    "caption" => "text caption",
-                                    "value" => "text value"
-                                ]
-                            ],
-                            "labelDescription" => "bespkoe label description"
+                            "description" => request()->get('product_name'),
                         ]
                     ],
-                    "isCustomsDeclarable" => true,
-                    "declaredValue" => 150,
-                    "declaredValueCurrency" => "USD",
-                    "exportDeclaration" => [
-                        "lineItems" => [
-                            [
-                                "number" => 1,
-                                "description" => "line item description",
-                                "price" => 150,
-                                "quantity" => [
-                                    "value" => 1,
-                                    "unitOfMeasurement" => "BOX"
-                                ],
-                                "commodityCodes" => [
-                                    [
-                                        "typeCode" => "outbound",
-                                        "value" => "HS1234567890"
-                                    ]
-                                ],
-                                "exportReasonType" => "permanent",
-                                "manufacturerCountry" => "CA",
-                                "exportControlClassificationNumber" => "US123456789",
-                                "weight" => [
-                                    "netValue" => 10,
-                                    "grossValue" => 10
-                                ],
-                                "isTaxesPaid" => true,
-                                "additionalInformation" => [
-                                    "string"
-                                ],
-                                "customerReferences" => [
-                                    [
-                                        "typeCode" => "AFE",
-                                        "value" => "string"
-                                    ]
-                                ],
-                                "customsDocuments" => [
-                                    [
-                                        "typeCode" => "972",
-                                        "value" => "string"
-                                    ]
-                                ]
-                            ]
-                        ],
-                        "invoice" => [
-                            "number" => "12345-ABC",
-                            "date" => "2020-03-18",
-                            "signatureName" => "Brewer",
-                            "signatureTitle" => "Mr.",
-                            "signatureImage" => "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=",
-                            "instructions" => [
-                                "string"
-                            ],
-                            "customerDataTextEntries" => [
-                                "string"
-                            ],
-                            "function" => "import",
-                            "totalNetWeight" => 999999999999,
-                            "totalGrossWeight" => 999999999999,
-                            "customerReferences" => [
-                                [
-                                    "typeCode" => "ACL",
-                                    "value" => "string"
-                                ]
-                            ],
-                            "termsOfPayment" => "100 days"
-                        ],
-                        "remarks" => [
-                            [
-                                "value" => "declaration remark"
-                            ]
-                        ],
-                        "additionalCharges" => [
-                            [
-                                "value" => 10,
-                                "caption" => "fee",
-                                "typeCode" => "admin"
-                            ]
-                        ],
-                        "destinationPortName" => "port details",
-                        "placeOfIncoterm" => "port of departure or destination details",
-                        "payerVATNumber" => "12345ED",
-                        "recipientReference" => "recipient reference",
-                        "exporter" => [
-                            "id" => "123",
-                            "code" => "EXPCZ"
-                        ],
-                        "packageMarks" => "marks",
-                        "declarationNotes" => [
-                            [
-                                "value" => "up to three declaration notes"
-                            ]
-                        ],
-                        "exportReference" => "export reference",
-                        "exportReason" => "export reason",
-                        "exportReasonType" => "permanent",
-                        "licenses" => [
-                            [
-                                "typeCode" => "export",
-                                "value" => "license"
-                            ]
-                        ],
-                        "shipmentType" => "personal",
-                        "customsDocuments" => [
-                            [
-                                "typeCode" => "972",
-                                "value" => "string"
-                            ]
-                        ]
-                    ],
-                    "description" => "shipment description",
-                    "USFilingTypeValue" => "12345",
+                    "isCustomsDeclarable" => false,
+                    "description" => request()->get('product_name'),
                     "incoterm" => "DAP",
                     "unitOfMeasurement" => "metric"
                 ],
-                "documentImages" => [
-                    [
-                        "typeCode" => "INV",
-                        "imageFormat" => "PDF",
-                        "content" => "JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwogIC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMKICAvTWVkaWFCb3ggWyAwIDAgMjAwIDIwMCBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMgMCBSIF0KPj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50IDIgMCBSCiAgL1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBSIAogICAgPj4KICA+PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoKPDwKICAvVHlwZSAvRm9udAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvVGltZXMtUm9tYW4KPj4KZW5kb2JqCgo1IDAgb2JqICAlIHBhZ2UgY29udGVudAo8PAogIC9MZW5ndGggNDQKPj4Kc3RyZWFtCkJUCjcwIDUwIFRECi9GMSAxMiBUZgooSGVsbG8sIHdvcmxkISkgVGoKRVQKZW5kc3RyZWFtCmVuZG9iagoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4gCjAwMDAwMDAwNzkgMDAwMDAgbiAKMDAwMDAwMDE3MyAwMDAwMCBuIAowMDAwMDAwMzAxIDAwMDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G"
-                    ]
-                ],
                 "requestOndemandDeliveryURL" => false,
-                "shipmentNotification" => [
-                    [
-                        "typeCode" => "email",
-                        "receiverId" => "receiver@email.com",
-                        "languageCode" => "eng",
-                        "languageCountryCode" => "US",
-                        "bespokeMessage" => "message to be included in the notification"
-                    ]
-                ],
                 "getOptionalInformation" => false,
-                "parentShipment" => [
-                    "productCode" => "s",
-                    "packagesCount" => 1
-                ],
-                "valueAddedServices" => [
-                    [
-                        "serviceCode" => "WY"
-                    ]
-                ]
             ];
-            */
-            echo $dhl->createShipment($request);
+            echo $dhl->createShipment($shipment);
         } else {
             echo response()->json(
                 $validation->errors(),

@@ -59,6 +59,10 @@ trait FormValidator
             'date_format'   => "The $attribute field does not match the format $additional",
             'in'    => "The $attribute field must be in $additional.",
             'not_in'    => "The $attribute field must not be in $additional.",
+            'size'    => "The $attribute field must size contain $additional characters or items.",
+            'max'    => "The $attribute field may not be greater than $additional.",
+            'min'    => "The $attribute must be at least $additional",
+            'string'    => "The $attribute field must be a string.",
             'array' => "The $attribute field must be an array.",
             'required'  => "The $attribute field is required.",
         ];
@@ -77,6 +81,8 @@ trait FormValidator
                 return explode(',', $params);
             case 'date_format':
                 return $params;
+            case 'size':
+                return (int) $params;
         }
     }
 }
